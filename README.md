@@ -1,4 +1,4 @@
-# OperatingSystem Assignment 2 
+# Operating Systems Assignment 2 
 A simple multiplayer game where players can move around a game board and collect items.
 
 ## This Project  is made by Ahmad Hassan 
