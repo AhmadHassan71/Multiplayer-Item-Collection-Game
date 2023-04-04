@@ -13,7 +13,7 @@ A simple multiplayer game where players can move around a game board and collect
 #### and run it by using 
 > $./main
 ## 
-Please note the main file of this project is located at: SourceCode/main.cpp
+Please note that the main file of this project is located at: SourceCode/main.cpp
 
 Images used are located at : SourceCode/img/
 
