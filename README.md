@@ -7,6 +7,7 @@ A simple multiplayer game where players can move around a game board and collect
 
 ### However you can also compile this code by using following command
 $cd src
+
 $g++ main.cpp -o main -lSDL2 -lSDL2_image -lSDL2_ttf -lpthread
 
 #### and run it by using 
