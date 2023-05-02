@@ -1,5 +1,5 @@
 # Muliplayer Game using threads
-A simple multiplayer game where players can move around a game board and collect items.
+Item Raiders is a simple multiplayer game where players can move around a game board and collect items.
 
 ## This Project  is made by Ahmad Hassan 
 
