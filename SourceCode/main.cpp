@@ -11,7 +11,17 @@
 
 using namespace std;
 
+int findSizeOfBoard(int RollNum, int LastDigit);
+void gameDisplay();
 
+int main(int argc, char *args[])
+{
+
+	gameDisplay();
+	SDL_Quit();
+
+	return 0;
+}
 
 int findSizeOfBoard(int RollNum, int LastDigit) // finds out "n" or the size of matrix
 {
@@ -28,9 +38,9 @@ int findSizeOfBoard(int RollNum, int LastDigit) // finds out "n" or the size of 
 
 	return sizeNum;
 }
-int main(int argc, char *args[])
-{
 
+void gameDisplay()
+{
 	int RollNum = 403;
 	int LastDigit = (RollNum % 100);
 
@@ -58,12 +68,23 @@ int main(int argc, char *args[])
 	RenderWindow window("21i-0403 - Assignemnt2", 1280, 720);
 
 	int windowRefreshRate = window.getRefreshRate();
-	
+
 	// std::cout<<"Refresh rate: "<<windowRefreshRate<<std::endl;
+	// for running using cmake
+	/*
+	SDL_Texture *player1 = window.loadTexture("src/img/sprites/p1.png");
+	SDL_Texture *player2 = window.loadTexture("src/img/sprites/p2.png");
+	SDL_Texture *player3 = window.loadTexture("src/img/sprites/p3.png");
 
-
+	SDL_Texture *bkg = window.loadTexture("src/img/grass.png");
+	SDL_Texture *i1 = window.loadTexture("src/img/items/axe.png");
+	SDL_Texture *i2 = window.loadTexture("src/img/items/sword.png");
+	SDL_Texture *i3 = window.loadTexture("src/img/items/helm.png");
+	SDL_Texture *i4 = window.loadTexture("src/img/items/goldhelm.png");
+	SDL_Texture *PauseMenu = window.loadTexture("src/img/pause.png");
+*/
 	// for running on terminal uncomment the comment below and comment the code above
-	
+
 	SDL_Texture *player1 = window.loadTexture("img/sprites/p1.png");
 	SDL_Texture *player2 = window.loadTexture("img/sprites/p2.png");
 	SDL_Texture *player3 = window.loadTexture("img/sprites/p3.png");
@@ -74,13 +95,11 @@ int main(int argc, char *args[])
 	SDL_Texture *i3 = window.loadTexture("img/items/helm.png");
 	SDL_Texture *i4 = window.loadTexture("img/items/goldhelm.png");
 	SDL_Texture *PauseMenu = window.loadTexture("img/pause.png");
-	TTF_Font *font = TTF_OpenFont("fonts/arial.TTF", 24);
-
 
 	string score1 = "Player 1";
 	string score2 = "Player 2";
 	string score3 = "Player 3";
-	
+	TTF_Font *font = TTF_OpenFont("src/fonts/arial.TTF", 24);
 	SDL_Color color = {255, 255, 255, 255};
 
 	std::vector<Object> board = {Object(Vector2f(0, 0), bkg), Object(Vector2f(30, 0), bkg), Object(Vector2f(60, 0), bkg),
@@ -171,17 +190,27 @@ int main(int argc, char *args[])
 			{
 			case SDLK_UP:
 				// cout << "UP" << endl;
-
 				pthread_create(&thr_p1, &a1, moveUp, obj1);
 				pthread_join(thr_p1, &obj1);
 				//_player1.move(0, -30);
 				// cout << _player1.getPos().x << _player1.getPos().y << endl;
+				if (_player1.getPos().intersects(_player2.getPos()) || _player1.getPos().intersects(_player3.getPos()))
+				{
+					score[0]--;
+					_player1.move(0, -30);
+				}
 				break;
 
 			case SDLK_DOWN:
 				// cout << "DOWN" << endl;
+
 				pthread_create(&thr_p1, &a1, moveDown, obj1);
 				pthread_join(thr_p1, &obj1);
+				if (_player1.getPos().intersects(_player2.getPos()) || _player1.getPos().intersects(_player3.getPos()))
+				{
+					score[0]--;
+					_player1.move(0, 30);
+				}
 
 				//_player1.move(0, 30);
 				// cout << _player1.getPos().x << _player1.getPos().y << endl;
@@ -190,6 +219,11 @@ int main(int argc, char *args[])
 			case SDLK_LEFT:
 				pthread_create(&thr_p1, &a1, moveLeft, obj1);
 				pthread_join(thr_p1, &obj1);
+				if (_player1.getPos().intersects(_player2.getPos()) || _player1.getPos().intersects(_player3.getPos()))
+				{
+					score[0]--;
+					_player1.move(30, 0);
+				}
 
 				//_player1.move(-30, 0);
 				// cout << _player1.getPos().x << _player1.getPos().y << endl;
@@ -198,6 +232,11 @@ int main(int argc, char *args[])
 			case SDLK_RIGHT:
 				pthread_create(&thr_p1, &a1, moveRight, obj1);
 				pthread_join(thr_p1, &obj1);
+				if (_player1.getPos().intersects(_player2.getPos()) || _player1.getPos().intersects(_player3.getPos()))
+				{
+					score[0]--;
+					_player1.move(30, 0);
+				}
 
 				//_player1.move(30, 0);
 				// cout << _player1.getPos().x << _player1.getPos().y << endl;
@@ -206,6 +245,12 @@ int main(int argc, char *args[])
 
 				pthread_create(&thr_p2, &a2, moveUp, obj2);
 				pthread_join(thr_p2, &obj2);
+				if (_player2.getPos().intersects(_player1.getPos()) || _player2.getPos().intersects(_player3.getPos()))
+				{
+					score[1]--;
+					_player2.move(0, -30);
+				}
+
 				// cout << "UP" << endl;
 				//_player2.move(0, -30);
 				// cout << _player2.getPos().x << _player2.getPos().y << endl;
@@ -214,6 +259,12 @@ int main(int argc, char *args[])
 			case SDLK_s:
 				pthread_create(&thr_p2, &a2, moveDown, obj2);
 				pthread_join(thr_p2, &obj2);
+				if (_player2.getPos().intersects(_player1.getPos()) || _player2.getPos().intersects(_player3.getPos()))
+				{
+					score[1]--;
+					_player2.move(0, 30);
+				}
+
 				// cout << "DOWN" << endl;
 				//_player2.move(0, 30);
 				// cout << _player2.getPos().x << _player2.getPos().y << endl;
@@ -222,6 +273,11 @@ int main(int argc, char *args[])
 			case SDLK_a:
 				pthread_create(&thr_p2, &a2, moveLeft, obj2);
 				pthread_join(thr_p2, &obj2);
+				if (_player2.getPos().intersects(_player1.getPos()) || _player2.getPos().intersects(_player3.getPos()))
+				{
+					score[1]--;
+					_player2.move(30, 0);
+				}
 				//_player2.move(-30, 0);
 				// cout << _player2.getPos().x << _player2.getPos().y << endl;
 
@@ -229,12 +285,22 @@ int main(int argc, char *args[])
 			case SDLK_d:
 				pthread_create(&thr_p2, &a2, moveRight, obj2);
 				pthread_join(thr_p2, &obj2);
+				if (_player2.getPos().intersects(_player1.getPos()) || _player2.getPos().intersects(_player3.getPos()))
+				{
+					score[1]--;
+					_player2.move(-30, 0);
+				}
 				//_player2.move(30, 0);
 				// cout << _player2.getPos().x << _player2.getPos().y << endl;
 				break;
 			case SDLK_i:
 				pthread_create(&thr_p3, &a3, moveUp, obj3);
 				pthread_join(thr_p3, &obj3);
+				if (_player3.getPos().intersects(_player2.getPos()) || _player3.getPos().intersects(_player1.getPos()))
+				{
+					score[2]--;
+					_player3.move(0, -30);
+				}
 				// cout << "UP" << endl;
 				//_player3.move(0, -30);
 				// cout << _player2.getPos().x << _player2.getPos().y << endl;
@@ -243,6 +309,11 @@ int main(int argc, char *args[])
 			case SDLK_k:
 				pthread_create(&thr_p3, &a3, moveDown, obj3);
 				pthread_join(thr_p3, &obj3);
+				if (_player3.getPos().intersects(_player2.getPos()) || _player3.getPos().intersects(_player1.getPos()))
+				{
+					score[2]--;
+					_player3.move(0, 30);
+				}
 				// cout << "DOWN" << endl;
 				//_player3.move(0, 30);
 				// cout << _player2.getPos().x << _player2.getPos().y << endl;
@@ -251,6 +322,11 @@ int main(int argc, char *args[])
 			case SDLK_j:
 				pthread_create(&thr_p3, &a3, moveLeft, obj3);
 				pthread_join(thr_p3, &obj3);
+				if (_player3.getPos().intersects(_player2.getPos()) || _player3.getPos().intersects(_player1.getPos()))
+				{
+					score[2]--;
+					_player3.move(30, 0);
+				}
 				//_player3.move(-30, 0);
 				// cout << _player2.getPos().x << _player2.getPos().y << endl;
 
@@ -258,6 +334,11 @@ int main(int argc, char *args[])
 			case SDLK_l:
 				pthread_create(&thr_p3, &a3, moveRight, obj3);
 				pthread_join(thr_p3, &obj3);
+				if (_player3.getPos().intersects(_player2.getPos()) || _player3.getPos().intersects(_player1.getPos()))
+				{
+					score[2]--;
+					_player3.move(-30, 0);
+				}
 				//_player3.move(30, 0);
 				// cout << _player2.getPos().x << _player2.getPos().y << endl;
 				break;
@@ -421,18 +502,13 @@ int main(int argc, char *args[])
 			window.render(pause_menu);
 			window.display();
 		}
-	
-	
-	int frameTicks = SDL_GetTicks() - startTicks;
-	if (frameTicks < 300 / window.getRefreshRate())
-	{
-		SDL_Delay(300 / window.getRefreshRate() - frameTicks);
+
+		int frameTicks = SDL_GetTicks() - startTicks;
+		if (frameTicks < 300 / window.getRefreshRate())
+		{
+			SDL_Delay(300 / window.getRefreshRate() - frameTicks);
+		}
 	}
-	}
 
-
-window.cleanUp();
-SDL_Quit();
-
-return 0;
+	window.cleanUp();
 }
